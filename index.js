@@ -1,36 +1,39 @@
 const fetch = require('node-fetch');
+const fs = require('fs').promises;
 
-function urlFetch(url){
+function urlFetch(url) {
   return fetch(url).then(result => result.json())
 }
 
 
-//console.log(urlFetch(`https://swapi.dev/api/people/1`))
+let homeworld;
+let films;
+let string;
+let luke;
 
 const lukeSkywalker = urlFetch('https://swapi.dev/api/people/1')
 
-//console.log(urlFetch('https://swapi.dev/api/people/1'))
-
-console.log(lukeSkywalker)
-
-let homeworld = lukeSkywalker
+lukeSkywalker
   .then(person => urlFetch(person.homeworld))
-  .then(result => console.log(result));
+  .then(result => homeworld = result.name);
 
-const lukeFilms = lukeSkywalker
+lukeSkywalker
   .then(person => {
-    let films = person.films;
+    luke = person.name;
+    let filmsx = person.films;
     let filmUrls = []
-    for (let film of films){
+    for (let film of filmsx) {
       filmUrls.push(urlFetch(film))
     }
     return filmUrls;
-    })
-    .then(films => {
-      return Promise.all(films)
-    })
-    .then(names => {
-      names.forEach(e => {
-        console.log(e.title)
-      })
-    })
+  })
+  .then(filmsb => {
+    return Promise.all(filmsb)
+  })
+  .then(names => {
+    films = names.map(e => e.title);
+  })
+  .then(() => {
+    string = `My name is ${luke} and I am from ${homeworld}. I starred in the following films: ${films.join(', ')}.`
+    fs.writeFile('test.txt', string, 'utf-8')
+  })
