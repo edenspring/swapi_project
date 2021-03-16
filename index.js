@@ -1,9 +1,32 @@
 const fetch = require('node-fetch');
 
-const firstFetch = fetch('https://swapi.dev/api/people/1')
+function urlFetch(url){
+  return fetch(url).then(result => result.json())
+}
 
-console.log(firstFetch)
 
-firstFetch
-  .then(res => res.json())
-  .then(person => console.log(person));
+//console.log(urlFetch(`https://swapi.dev/api/people/1`))
+
+const lukeSkywalker = urlFetch('https://swapi.dev/api/people/1')
+
+//console.log(urlFetch('https://swapi.dev/api/people/1'))
+
+console.log(lukeSkywalker)
+
+// let homeworld = lukeSkywalker
+//   .then(person => urlFetch(person.homeworld))
+//   .then(result => console.log(result));
+
+const lukeFilms = lukeSkywalker
+  .then(person => {
+    let films = person.films;
+    let filmUrls = []
+    for (let film of films){
+      filmUrls.push(urlFetch(film))
+    }
+    return filmUrls;
+    })
+    .then(films => {
+      return Promise.all(films)
+    })
+    .then(names => console.log(names))
