@@ -13,9 +13,9 @@ const lukeSkywalker = urlFetch('https://swapi.dev/api/people/1')
 
 console.log(lukeSkywalker)
 
-// let homeworld = lukeSkywalker
-//   .then(person => urlFetch(person.homeworld))
-//   .then(result => console.log(result));
+let homeworld = lukeSkywalker
+  .then(person => urlFetch(person.homeworld))
+  .then(result => console.log(result));
 
 const lukeFilms = lukeSkywalker
   .then(person => {
@@ -29,4 +29,8 @@ const lukeFilms = lukeSkywalker
     .then(films => {
       return Promise.all(films)
     })
-    .then(names => console.log(names))
+    .then(names => {
+      names.forEach(e => {
+        console.log(e.title)
+      })
+    })
