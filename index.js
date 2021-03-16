@@ -1,18 +1,9 @@
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
 
-console.log(fetch)
+const firstFetch = fetch('https://swapi.dev/api/people/1')
 
-//This is a promise
-const makingRequestToGithub = fetch("https://api.github.com/users/edenspring")
+console.log(firstFetch)
 
-makingRequestToGithub
-  .then(responseObject => {
-    console.log(responseObject)
-    return responseObject.json()
-  })
-  .then(data =>{
-    console.log(data)
-  })
-  .catch(err => {
-    console.log(err)
-  })
+firstFetch
+  .then(res => res.json())
+  .then(person => console.log(person));
